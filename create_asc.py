@@ -13,6 +13,8 @@
 
 import numpy as np
 import random as rand
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap 
 
 #some global variables for convenience
 
@@ -160,7 +162,7 @@ def Square(OutputFile, size, NumberGreen):
 
 
 
-# function to WRITE to .ASC file
+# function to WRITE to .ASC file and create image thumbnail
 
 def WriteAsc(OutputFile, size, GisData):
 	header = ('ncols '+ str(size) +'\n')    # make sure to change if AOI not square 
@@ -170,8 +172,25 @@ def WriteAsc(OutputFile, size, GisData):
 	header += ('cellsize 0.000093\n')
 	header += ('NODATA_value -9999')
 	np.savetxt(OutputFile, GisData, header=header, comments = '', fmt='%1.5s')
+	
+	OutputImage = (OutputFile.rsplit( ".", 1 )[ 0 ] + '.png') 	#name of image thumbnail
+	
+	GisDataForImage = GisData			#Create a second data array for image thumbnail
 
-
+	GisDataForImage[0,0]=0				#write values into first line of new array
+	GisDataForImage[0,1]=1				## to guarantee data has full range for cmap
+	GisDataForImage[0,2]=2
+	GisDataForImage[0,3]=3
+	GisDataForImage[0,4]=4
+	GisDataForImage[0,5]=5
+										#create colormap, create plot, write plot 
+	cmap = ListedColormap(['brown','green','yellow','gray',  'blue', 'black'], 'indexed')
+	plt.imshow(GisDataForImage, cmap=cmap)  
+	plt.savefig(OutputImage)
+	
+	
+	
+	
 
 
 # MAIN get INPUT from user and go to appropriate function

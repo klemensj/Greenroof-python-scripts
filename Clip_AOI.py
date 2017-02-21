@@ -1,7 +1,8 @@
 
 # # # # # # # # # # # # # # # # # # #
 # The purpose of this code is to extract areas of interest from the greenroofascii.txt  
-# file, which is a raster land use map at 1 foot resolution of the city of Philadelphia
+## file, which is a raster land use map at 1 foot resolution of the city of Philadelphia
+## and also to generate a thumbnail image of the AOI
 #
 # To use set 'clipsize'.  Will create a square area of interest (AOI) 
 ## with side of length 'clipsize'. 
@@ -10,11 +11,16 @@
 
 import numpy as np
 import random as rand
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap 
 
 							# comment out line below to automate
 							# or make regularly spaced AOIs
 
-OutputFile = raw_input("Enter the name of the output file as filename.asc: ")
+File = raw_input("Enter the name of the output file without extension: ")
+OutputFile = (File + '.asc')
+OutputImage = (File + '.png') 	#name of image thumbnail
+
 
 clipsize=2595                 # 2595 is value of original AOI file, somewhat arbitrary
 							  # single value b/c square matrices, update if needed
@@ -63,4 +69,18 @@ header += ('yllcorner ' + str(coly) + '\n')  	# column of top left corner of AOI
 header += ('cellsize 0.000093\n')
 header += ('NODATA_value -9999')
 np.savetxt(OutputFile, GisData, header=header, comments = '', fmt='%1.5s')
+
+GisDataForImage = GisData			#Create a second data array for image thumbnail
+
+GisDataForImage[0,0]=0				#write values into first line of new array
+GisDataForImage[0,1]=1				## to guarantee data has full range for cmap
+GisDataForImage[0,2]=2
+GisDataForImage[0,3]=3
+GisDataForImage[0,4]=4
+GisDataForImage[0,5]=5
+									#create colormap, create plot, write plot 
+cmap = ListedColormap(['brown','green','yellow','gray',  'blue', 'black'], 'indexed')
+plt.imshow(GisDataForImage, cmap=cmap)  
+plt.savefig(OutputImage)
+
 print "Done"
