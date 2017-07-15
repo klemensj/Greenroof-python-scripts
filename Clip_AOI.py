@@ -4,10 +4,14 @@
 ## file, which is a raster land use map at 1 foot resolution of the city of Philadelphia
 ## and also to generate a thumbnail image of the AOI
 #
+# This file will select a random AOI
+## Clip_AOI_multiple.py will create a set of AOIs of user determined size
+## Clip_AOI_by_coords.py will select a given AOI by x and y coordinates of upper left
+#
 # To use set 'clipsize'.  Will create a square area of interest (AOI) 
 ## with side of length 'clipsize'. 
 #
-#
+
 
 import numpy as np
 import random as rand
@@ -34,7 +38,7 @@ ysize = 89539
 ## to create regularly spaced AOIs replace the two lines below with a loop 
 
 rowx=  rand.randint(6, xsize-clipsize+6) # +6  accounts for six line header and
-coly= rand.randint(0, ysize-clipsize)    ## -clipsize keeps AOI within file
+coly=  rand.randint(0, ysize-clipsize)    ## -clipsize keeps AOI within file
 
 
 
@@ -72,14 +76,15 @@ np.savetxt(OutputFile, GisData, header=header, comments = '', fmt='%1.5s')
 
 GisDataForImage = GisData			#Create a second data array for image thumbnail
 
-GisDataForImage[0,0]=0				#write values into first line of new array
-GisDataForImage[0,1]=1				## to guarantee data has full range for cmap
-GisDataForImage[0,2]=2
-GisDataForImage[0,3]=3
-GisDataForImage[0,4]=4
-GisDataForImage[0,5]=5
+GisDataForImage[0,0]=-1
+GisDataForImage[0,1]=0				#write values into first line of new array
+GisDataForImage[0,2]=1				## to guarantee data has full range for cmap
+GisDataForImage[0,3]=2
+GisDataForImage[0,4]=3
+GisDataForImage[0,5]=4
+GisDataForImage[0,6]=5
 									#create colormap, create plot, write plot 
-cmap = ListedColormap(['brown','green','yellow','gray',  'blue', 'black'], 'indexed')
+cmap = ListedColormap(['brown','cyan','green','yellow','gray',  'blue', 'black'], 'indexed')
 plt.imshow(GisDataForImage, cmap=cmap)  
 plt.savefig(OutputImage)
 
