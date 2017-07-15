@@ -80,14 +80,15 @@ for i in range(AOIStart,AOIStart+AOINumber):
 	
 	GisDataForImage = GisData			#Create a second data array for image thumbnail
 	
-	GisDataForImage[0,0]=0				#write values into first line of new array
-	GisDataForImage[0,1]=1				## to guarantee data has full range for cmap
-	GisDataForImage[0,2]=2
-	GisDataForImage[0,3]=3
-	GisDataForImage[0,4]=4
-	GisDataForImage[0,5]=5
+	GisDataForImage[0,0]=-1
+	GisDataForImage[0,1]=0				#write values into first line of new array
+	GisDataForImage[0,2]=1				## to guarantee data has full range for cmap
+	GisDataForImage[0,3]=2
+	GisDataForImage[0,4]=3
+	GisDataForImage[0,5]=4
+	GisDataForImage[0,6]=5
 										#create colormap, create plot, write plot 
-	cmap = ListedColormap(['brown','green','yellow','gray',  'blue', 'black'], 'indexed')
+	cmap = ListedColormap(['brown','cyan','green','yellow','gray',  'blue', 'black'], 'indexed')
 	plt.imshow(GisDataForImage, cmap=cmap)  
 	plt.savefig(OutputImage)
 	
